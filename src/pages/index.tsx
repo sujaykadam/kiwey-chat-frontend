@@ -3,7 +3,6 @@ import {signIn, signOut, useSession} from 'next-auth/react'
 
 const Home: NextPage = () => {
   const {data: data, } = useSession()
-  console.log(data)
   return (
     <div>
       { 
