@@ -2,8 +2,9 @@ import { useLazyQuery } from "@apollo/client";
 import { Button, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Stack } from "@chakra-ui/react";
 import { useState } from "react";
 import userOperations from "../../../../graphql/operations/user";
-import { SearchUsersData, SearchUsersInput } from "../../../../util/types";
+import { SearchUsersData, SearchUsersInput, SearchedUser } from "../../../../util/types";
 import UserSearchList from "./UserSearchList";
+import Participants from "./Participants";
 
 interface ConversationModalProps {
 	isOpen: boolean;
@@ -12,11 +13,19 @@ interface ConversationModalProps {
 
 const ConversationModal: React.FC<ConversationModalProps> = ({isOpen, onClose}) => {
 	const [username, setUsername] = useState('');
+	const [participants, setParticipants] = useState<Array<SearchedUser>>([]);
 	const [searchUsers, {data, error, loading}] = useLazyQuery<SearchUsersData, SearchUsersInput>(userOperations.Queries.searchUsers);
 
 	const onSearch = async (event: React.FormEvent) => { 
 		event.preventDefault();
 		searchUsers({variables: {username}});
+	}
+
+	const addParticipant = (user: SearchedUser) => {
+		setParticipants(prev => Array.from(new Set([...prev, user])));
+	}
+	const removeParticipant = (userId: String) => {
+		setParticipants(prev => prev.filter(user => user.id !== userId));
 	}
 
 	return (
@@ -35,7 +44,8 @@ const ConversationModal: React.FC<ConversationModalProps> = ({isOpen, onClose}) 
 								</Button>
 							</Stack>
 						</form>
-						{data?.searchUsers && <UserSearchList users={data?.searchUsers}/>}
+						{data?.searchUsers && <UserSearchList users={data?.searchUsers} addParticipant={addParticipant}/>}
+						{participants.length !== 0 && <Participants participants={participants} removeParticipant={removeParticipant} />}
 					</ModalBody>
 				</ModalContent>
 		  	</Modal>
