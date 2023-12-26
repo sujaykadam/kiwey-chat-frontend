@@ -16,14 +16,23 @@ const Auth: React.FC<IAuthProps> = ({
 	reloadSession,
 }) => {
 	const [username, setUsername] = useState("");
-	const [createUsername, {data, loading, error}] = useMutation<createUsernameData, createUsernameVariables>(
+	const [createUsername, {loading, error}] = useMutation<createUsernameData, createUsernameVariables>(
 		userOperations.Mutations.createUsername
 	);
 
 	const onsubmit = async () => {
 		debugger
 		try {
-			await createUsername({variables: {username}});
+			const {data} = await createUsername({variables: {username}});
+			if(!data?.createUsername){
+				throw new Error("No data returned");
+			}
+			
+			if(data.createUsername.error){
+				throw new Error(data.createUsername.error);
+			}
+
+			reloadSession();
 		} catch (error) {
 			console.log('onSubmit error:', error);
 		}
