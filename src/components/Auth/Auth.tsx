@@ -4,7 +4,7 @@ import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 import userOperations from "../../graphql/operations/user";
-import { createUsernameData, createUsernameVariables } from "../../util/types";
+import { CreateUsernameData, CreateUsernameVariables } from "../../util/types";
 import toast from "react-hot-toast";
 
 interface IAuthProps {
@@ -17,7 +17,7 @@ const Auth: React.FC<IAuthProps> = ({
 	reloadSession,
 }) => {
 	const [username, setUsername] = useState("");
-	const [createUsername, {loading, error}] = useMutation<createUsernameData, createUsernameVariables>(
+	const [createUsername, {loading, error}] = useMutation<CreateUsernameData, CreateUsernameVariables>(
 		userOperations.Mutations.createUsername
 	);
 
