@@ -3,6 +3,7 @@ import { Button, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalH
 import { useState } from "react";
 import userOperations from "../../../../graphql/operations/user";
 import { SearchUsersData, SearchUsersInput } from "../../../../util/types";
+import UserSearchList from "./UserSearchList";
 
 interface ConversationModalProps {
 	isOpen: boolean;
@@ -34,6 +35,7 @@ const ConversationModal: React.FC<ConversationModalProps> = ({isOpen, onClose}) 
 								</Button>
 							</Stack>
 						</form>
+						{data?.searchUsers && <UserSearchList users={data?.searchUsers}/>}
 					</ModalBody>
 				</ModalContent>
 		  	</Modal>
