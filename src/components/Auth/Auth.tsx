@@ -22,7 +22,6 @@ const Auth: React.FC<IAuthProps> = ({
 	);
 
 	const onsubmit = async () => {
-		debugger
 		try {
 			const {data} = await createUsername({variables: {username}});
 			if(!data?.createUsername){
@@ -49,7 +48,7 @@ const Auth: React.FC<IAuthProps> = ({
 							Create Username
 						</Text>
 						<Input placeholder="Username" value={username} onChange={(event) => setUsername(event.target.value)}/>
-						<Button width='100%' onClick={onsubmit}>
+						<Button width='100%' onClick={onsubmit} isLoading={loading}>
 							Save
 						</Button>
 					</>
