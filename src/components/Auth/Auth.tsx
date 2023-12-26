@@ -5,6 +5,7 @@ import { signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 import userOperations from "../../graphql/operations/user";
 import { createUsernameData, createUsernameVariables } from "../../util/types";
+import toast from "react-hot-toast";
 
 interface IAuthProps {
 	session: Session | null;
@@ -31,9 +32,10 @@ const Auth: React.FC<IAuthProps> = ({
 			if(data.createUsername.error){
 				throw new Error(data.createUsername.error);
 			}
-
+			toast.success("Username successfully created");
 			reloadSession();
-		} catch (error) {
+		} catch (error:any) {
+			toast.error(error.message);
 			console.log('onSubmit error:', error);
 		}
 	};
