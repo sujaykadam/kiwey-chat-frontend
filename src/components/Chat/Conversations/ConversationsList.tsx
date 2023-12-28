@@ -7,7 +7,7 @@ interface ConversationsListProps {
 	session: Session;
 }
 
-const ConversationsList:React.FC<ConversationsListProps> = ({session}) => {
+const ConversationsList: React.FC<ConversationsListProps> = ({ session }) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const onOpen = () => setIsOpen(true);
@@ -15,14 +15,30 @@ const ConversationsList:React.FC<ConversationsListProps> = ({session}) => {
 
 	return (
 		<Box>
-			<Box py={2} px={4} mb={4} bg='blackAlpha.200' borderRadius={4} cursor="pointer" onClick={onOpen}>
-				<Text textAlign="center" color="whiteAlpha.800" fontWeight={500}>
+			<Box
+				py={2}
+				px={4}
+				mb={4}
+				bg="blackAlpha.200"
+				borderRadius={4}
+				cursor="pointer"
+				onClick={onOpen}
+			>
+				<Text
+					textAlign="center"
+					color="whiteAlpha.800"
+					fontWeight={500}
+				>
 					Find or start a Conversation
 				</Text>
 			</Box>
-			<ConversationModal isOpen={isOpen} onClose={onClose} session={session}/>
+			<ConversationModal
+				isOpen={isOpen}
+				onClose={onClose}
+				session={session}
+			/>
 		</Box>
 	);
-}
+};
 
 export default ConversationsList;

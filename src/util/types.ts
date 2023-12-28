@@ -3,7 +3,7 @@ export interface CreateUsernameData {
 	createUsername: {
 		success: boolean;
 		error: string | null;
-	}
+	};
 }
 
 export interface CreateUsernameVariables {
@@ -12,10 +12,9 @@ export interface CreateUsernameVariables {
 
 export interface SearchUsersInput {
 	username: string;
-
 }
 export interface SearchUsersData {
-	searchUsers: Array<SearchedUser>
+	searchUsers: Array<SearchedUser>;
 }
 
 export interface SearchedUser {
@@ -27,7 +26,7 @@ export interface SearchedUser {
 export interface createConversationData {
 	createConversation: {
 		conversationId: string;
-	}
+	};
 }
 
 export interface createConversationInputs {

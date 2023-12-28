@@ -1,18 +1,17 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 const conversationOperations = {
-	Queries: {
-	},
+	Queries: {},
 	Mutations: {
 		createConversation: gql`
-			mutation CreateConversation($participantIds : [String]!) {
-				createConversation(participantIds: $participantIds){
+			mutation CreateConversation($participantIds: [String]!) {
+				createConversation(participantIds: $participantIds) {
 					conversationId
 				}
 			}
-		`
+		`,
 	},
-	Subscriptions: {}
+	Subscriptions: {},
 };
 
 export default conversationOperations;

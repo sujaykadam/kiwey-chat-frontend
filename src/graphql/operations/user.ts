@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 const userOperations = {
 	Queries: {
@@ -8,8 +8,8 @@ const userOperations = {
 					id
 					username
 				}
-			}		
-		`
+			}
+		`,
 	},
 	Mutations: {
 		createUsername: gql`
@@ -19,9 +19,9 @@ const userOperations = {
 					error
 				}
 			}
-		`
+		`,
 	},
-	Subscriptions: {}
+	Subscriptions: {},
 };
 
 export default userOperations;

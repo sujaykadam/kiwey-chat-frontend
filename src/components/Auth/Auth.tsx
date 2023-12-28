@@ -12,55 +12,68 @@ interface IAuthProps {
 	reloadSession: () => void;
 }
 
-const Auth: React.FC<IAuthProps> = ({
-	session,
-	reloadSession,
-}) => {
+const Auth: React.FC<IAuthProps> = ({ session, reloadSession }) => {
 	const [username, setUsername] = useState("");
-	const [createUsername, {loading, error}] = useMutation<CreateUsernameData, CreateUsernameVariables>(
-		userOperations.Mutations.createUsername
-	);
+	const [createUsername, { loading, error }] = useMutation<
+		CreateUsernameData,
+		CreateUsernameVariables
+	>(userOperations.Mutations.createUsername);
 
 	const onsubmit = async () => {
 		try {
-			const {data} = await createUsername({variables: {username}});
-			if(!data?.createUsername){
+			const { data } = await createUsername({ variables: { username } });
+			if (!data?.createUsername) {
 				throw new Error("No data returned");
 			}
-			
-			if(data.createUsername.error){
+
+			if (data.createUsername.error) {
 				throw new Error(data.createUsername.error);
 			}
 			toast.success("Username successfully created");
 			reloadSession();
-		} catch (error:any) {
+		} catch (error: any) {
 			toast.error(error.message);
-			console.log('onSubmit error:', error);
+			console.log("onSubmit error:", error);
 		}
 	};
 
 	return (
-		<Center height="100vh" >
+		<Center height="100vh">
 			<Stack align="center" spacing="8">
 				{session ? (
 					<>
-						<Text fontSize="3xl">
-							Create Username
-						</Text>
-						<Input placeholder="Username" value={username} onChange={(event) => setUsername(event.target.value)}/>
-						<Button width='100%' onClick={onsubmit} isLoading={loading}>
+						<Text fontSize="3xl">Create Username</Text>
+						<Input
+							placeholder="Username"
+							value={username}
+							onChange={(event) =>
+								setUsername(event.target.value)
+							}
+						/>
+						<Button
+							width="100%"
+							onClick={onsubmit}
+							isLoading={loading}
+						>
 							Save
 						</Button>
 					</>
-				): (
+				) : (
 					<>
-						<Text fontSize="3xl">
-							Kiwey Chat
-						</Text>
-						<Button onClick={() => signIn("google")} leftIcon={<Image height="20px" src="/images/googlelogo.png" alt="Google"/> }>
+						<Text fontSize="3xl">Kiwey Chat</Text>
+						<Button
+							onClick={() => signIn("google")}
+							leftIcon={
+								<Image
+									height="20px"
+									src="/images/googlelogo.png"
+									alt="Google"
+								/>
+							}
+						>
 							Continue with Google
 						</Button>
-					</>	
+					</>
 				)}
 			</Stack>
 		</Center>
