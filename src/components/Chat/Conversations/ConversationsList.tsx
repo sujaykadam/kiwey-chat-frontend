@@ -1,7 +1,7 @@
 import { Box, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useState } from "react";
-import ConversationModal from "./Modal/Modal";
+import ConversationModal from "./Modal/ConversationModal";
 
 interface ConversationsListProps {
 	session: Session;
@@ -20,7 +20,7 @@ const ConversationsList:React.FC<ConversationsListProps> = ({session}) => {
 					Find or start a Conversation
 				</Text>
 			</Box>
-			<ConversationModal isOpen={isOpen} onClose={onClose} />
+			<ConversationModal isOpen={isOpen} onClose={onClose} session={session}/>
 		</Box>
 	);
 }
