@@ -1,11 +1,11 @@
 import { useMutation } from "@apollo/client";
 import { Button, Center, Image, Input, Stack, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
-import { signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import userOperations from "../../graphql/operations/user";
 import { CreateUsernameData, CreateUsernameVariables } from "../../util/types";
-import toast from "react-hot-toast";
 
 interface IAuthProps {
 	session: Session | null;
