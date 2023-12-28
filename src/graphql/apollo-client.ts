@@ -1,7 +1,8 @@
 import { ApolloClient, HttpLink, InMemoryCache, split } from "@apollo/client";
-import { WebSocketLink } from "@apollo/client/link/ws";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { createClient } from "graphql-ws";
+import { getSession } from "next-auth/react";
 
 if (!process.env.NEXT_PUBLIC_GRAPHQL_URL) {
 	throw new Error("Missing env variable NEXT_PUBLIC_GRAPHQL_URL");
@@ -16,9 +17,12 @@ if (!process.env.NEXT_PUBLIC_GRAPHQL_WS_URL) {
 }
 const wsLink =
 	typeof window !== "undefined"
-		? new WebSocketLink(
+		? new GraphQLWsLink(
 				createClient({
 					url: process.env.NEXT_PUBLIC_GRAPHQL_WS_URL,
+					connectionParams: async () => ({
+						session: await getSession(),
+					}),
 				})
 		  )
 		: null;

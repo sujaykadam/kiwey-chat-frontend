@@ -34,6 +34,6 @@ export interface createConversationInputs {
 	participantIds: Array<string>;
 }
 
-export interface conversationsData {
+export interface ConversationsData {
 	conversations: Array<ConversationPopulated>;
 }
