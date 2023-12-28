@@ -1,0 +1,3 @@
+[submodule "kiwey-chat-backend"]
+	path = kiwey-chat-backend
+	url = https://github.com/sujaykadam/kiwey-chat-backend.git
