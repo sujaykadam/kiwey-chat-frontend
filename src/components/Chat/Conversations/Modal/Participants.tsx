@@ -1,5 +1,5 @@
 import { Flex, Stack, Text } from "@chakra-ui/react";
-import { IoIosClose } from "react-icons/io";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 import { SearchedUser } from "../../../../util/types";
 
 interface ParticipantsProps {
@@ -15,7 +15,7 @@ const Participants: React.FunctionComponent<ParticipantsProps> = ({participants,
 					<Text color="whiteAlpha.700">
 						{participant.username}
 					</Text>
-					<IoIosClose size={20} cursor="pointer" onClick={() => removeParticipant(participant.id)}/>
+					<IoIosCloseCircleOutline size={24} cursor="pointer" onClick={() => removeParticipant(participant.id)}/>
 				</Stack>
 			))}
 		</Flex>
