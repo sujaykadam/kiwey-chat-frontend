@@ -1,6 +1,7 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { Button, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Stack } from "@chakra-ui/react";
 import { Session } from "next-auth";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import conversationOperations from "../../../../graphql/operations/conversation";
@@ -17,8 +18,10 @@ interface ConversationModalProps {
 const ConversationModal: React.FC<ConversationModalProps> = ({isOpen, onClose, session}) => {
 	const [username, setUsername] = useState('');
 	const [participants, setParticipants] = useState<Array<SearchedUser>>([]);
-	const [searchUsers, {data: searchUsersData}] = useLazyQuery<SearchUsersData, SearchUsersInput>(userOperations.Queries.searchUsers);
+	const [searchUsers, {data: searchUsersData, loading: searchUsersLoading }] = useLazyQuery<SearchUsersData, SearchUsersInput>(userOperations.Queries.searchUsers);
 	const [createConversation, { loading: createConversationLoading }] = useMutation<createConversationData, createConversationInputs>(conversationOperations.Mutations.createConversation);
+
+	const router = useRouter();
 
 	const onSearch = async (event: React.FormEvent) => { 
 		event.preventDefault();
@@ -32,12 +35,21 @@ const ConversationModal: React.FC<ConversationModalProps> = ({isOpen, onClose, s
 	}
 	const oncreateConversation = async() => {
 		try {
-			const {data} = await createConversation({variables: {
+			const {data: conversation} = await createConversation({variables: {
 				participantIds: [...participants.map(user => user.id), session?.user?.id]
 			}})
-			console.log("oncreateConversation data", data);		
+			if (!conversation?.createConversation){
+				throw new Error("Conversation not created");
+			}	
+			toast.success("Conversation created");
+			const {conversationId} = conversation.createConversation;
+			router.push({ query: { conversationId } })
+			// Reset state
+			setParticipants([]);
+			setUsername('');
+			onClose();
 		} catch (error:any) {
-			console.log("oncreateConversation", error);
+			console.log("oncreateConversation Error", error);
 			toast.error(error?.message);
 		}
 	}
@@ -53,7 +65,7 @@ const ConversationModal: React.FC<ConversationModalProps> = ({isOpen, onClose, s
 						<form onSubmit={onSearch}>
 							<Stack spacing={4}>
 								<Input placeholder="Enter Username" value={username} onChange={(event) => setUsername(event.target.value)}/>
-								<Button type="submit" isDisabled={!username}>
+								<Button type="submit" isDisabled={!username} isLoading={searchUsersLoading}>
 									Submit
 								</Button>
 							</Stack>
