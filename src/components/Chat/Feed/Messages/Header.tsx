@@ -48,7 +48,7 @@ const MessagesHeader: React.FC<MessagesHeaderProps> = ({
 			{/* {loading && <SkeletonLoader count={1} height="30px" width="320px" />} */}
 			{!conversation && !loading && <Text>Conversation Not Found</Text>}
 			{conversation && (
-				<Stack direction="row">
+				<Stack direction="row" mx={{ md: 8 }}>
 					<Text color="whiteAlpha.600">To: </Text>
 					<Text fontWeight={600}>
 						{formatUsernames(conversation.participants, userId)}
