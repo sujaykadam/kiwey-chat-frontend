@@ -1,4 +1,7 @@
-import { ConversationPopulated } from "../../../kiwey-chat-backend/src/util/types";
+import {
+	ConversationPopulated,
+	MessagePopulated,
+} from "../../../kiwey-chat-backend/src/util/types";
 // User Types
 export interface CreateUsernameData {
 	createUsername: {
@@ -36,4 +39,13 @@ export interface createConversationInputs {
 
 export interface ConversationsData {
 	conversations: Array<ConversationPopulated>;
+}
+
+// Message Types
+export interface MessagesData {
+	messages: Array<MessagePopulated>;
+}
+
+export interface MessagesVariables {
+	conversationId: string;
 }
