@@ -2,6 +2,7 @@ import { Box, Input } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import * as React from "react";
 import toast from "react-hot-toast";
+import Messages from "./Messages";
 
 interface MessageInputProps {
 	session: Session;
@@ -11,7 +12,7 @@ interface MessageInputProps {
 const MessageInput: React.FunctionComponent<MessageInputProps> = ({
 	session,
 	conversationId,
-}: MessageInputProps) => {
+}) => {
 	const [messageBody, setMessageBody] = React.useState("");
 
 	const onSendMessage = async (event: React.FormEvent) => {
@@ -25,6 +26,7 @@ const MessageInput: React.FunctionComponent<MessageInputProps> = ({
 	};
 	return (
 		<Box px={4} py={6} width="100%">
+			<Messages conversationId={conversationId} userId={session.user.id} />
 			<form onSubmit={onSendMessage}>
 				<Input
 					value={messageBody}
