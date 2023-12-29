@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { ConversationPopulated } from "../../../../kiwey-chat-backend/src/util/types";
 import ConversationOperations from "../../../graphql/operations/conversation";
 import { ConversationsData } from "../../../util/types";
+import SkeletonLoader from "../../common/SkeletonLoader";
 import ConversationsList from "./ConversationsList";
 interface ConversationsWrapperProps {
 	session: Session;
@@ -63,12 +64,19 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 			px={3}
 			display={{ base: conversationId ? "none" : "flex", md: "flex" }}
 		>
-			{/* Skeleton loader */}
-			<ConversationsList
-				session={session}
-				conversations={conversationsData?.conversations || null}
-				onViewConversation={onViewConversation}
-			/>
+			{conversationsLoading ? (
+				<SkeletonLoader
+					count={conversationsData?.conversations.length || 3}
+					height="80px"
+					width="100%"
+				/>
+			) : (
+				<ConversationsList
+					session={session}
+					conversations={conversationsData?.conversations || null}
+					onViewConversation={onViewConversation}
+				/>
+			)}
 		</Box>
 	);
 };
