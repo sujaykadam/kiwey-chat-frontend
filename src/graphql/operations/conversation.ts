@@ -10,7 +10,7 @@ const ConversationFields = `
 		}
 		hasSeenLatestMessage
 	}
-	lastMessage{
+	latestMessage{
 		${MessageFields}
 	}
 	updatedAt
