@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { Flex, Stack, Text } from "@chakra-ui/react";
+import { Flex, Stack } from "@chakra-ui/react";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import MessageOperations from "../../../../graphql/operations/message";
@@ -9,6 +9,7 @@ import {
 	MessagesVariables,
 } from "../../../../util/types";
 import SkeletonLoader from "../../../common/SkeletonLoader";
+import MessageItem from "./MessageItem";
 interface MessagesProps {
 	userId: string;
 	conversationId: string;
@@ -56,7 +57,6 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 	useEffect(() => {
 		subscribeToMoreMessages(conversationId);
 	}, [conversationId]);
-	console.log("message", messagesData);
 
 	return (
 		<Flex direction="column" justify="flex-end" overflow="hidden">
@@ -66,10 +66,13 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 				</Stack>
 			)}
 			{messagesData?.messages && (
-				<Flex direction="column-reverse" height="100%" overflowY="scroll">
+				<Flex direction="column-reverse" height="100%" width="100%" gap={6}>
 					{messagesData.messages.map((message) => (
-						// <MessageItem key={message.id} message={message} userId={userId} />
-						<Text key={message.id}>{message.body}</Text>
+						<MessageItem
+							key={message.id}
+							message={message}
+							sentByMe={userId === message.sender.id}
+						/>
 					))}
 				</Flex>
 			)}
