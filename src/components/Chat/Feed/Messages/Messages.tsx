@@ -1,8 +1,13 @@
 import { useQuery } from "@apollo/client";
 import { Flex, Stack, Text } from "@chakra-ui/react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import MessageOperations from "../../../../graphql/operations/message";
-import { MessagesData, MessagesVariables } from "../../../../util/types";
+import {
+	MessageSubscriptionData,
+	MessagesData,
+	MessagesVariables,
+} from "../../../../util/types";
 import SkeletonLoader from "../../../common/SkeletonLoader";
 interface MessagesProps {
 	userId: string;
@@ -17,6 +22,7 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 		data: messagesData,
 		loading: messagesLoading,
 		error: messagesError,
+		subscribeToMore,
 	} = useQuery<MessagesData, MessagesVariables>(
 		MessageOperations.Query.messages,
 		{
@@ -31,6 +37,27 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 	if (messagesError) {
 		return null;
 	}
+
+	const subscribeToMoreMessages = (conversationId: String) => {
+		subscribeToMore({
+			document: MessageOperations.Subscription.messageSent,
+			variables: { conversationId },
+			updateQuery: (prev, { subscriptionData }: MessageSubscriptionData) => {
+				if (!subscriptionData.data) return prev;
+
+				const newMessage = subscriptionData.data.messageSent || {};
+				return Object.assign({}, prev, {
+					messages: [newMessage, ...prev.messages],
+				});
+			},
+		});
+	};
+
+	useEffect(() => {
+		subscribeToMoreMessages(conversationId);
+	}, [conversationId]);
+	console.log("message", messagesData);
+
 	return (
 		<Flex direction="column" justify="flex-end" overflow="hidden">
 			{messagesLoading && (
@@ -42,7 +69,7 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 				<Flex direction="column-reverse" height="100%" overflowY="scroll">
 					{messagesData.messages.map((message) => (
 						// <MessageItem key={message.id} message={message} userId={userId} />
-						<Text>{message.body}</Text>
+						<Text key={message.id}>{message.body}</Text>
 					))}
 				</Flex>
 			)}
