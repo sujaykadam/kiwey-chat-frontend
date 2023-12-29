@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { Flex, Stack } from "@chakra-ui/react";
+import { Flex, Stack, Text } from "@chakra-ui/react";
 import toast from "react-hot-toast";
 import MessageOperations from "../../../../graphql/operations/message";
 import { MessagesData, MessagesVariables } from "../../../../util/types";
@@ -28,7 +28,9 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 			},
 		}
 	);
-
+	if (messagesError) {
+		return null;
+	}
 	return (
 		<Flex direction="column" justify="flex-end" overflow="hidden">
 			{messagesLoading && (
@@ -38,9 +40,10 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 			)}
 			{messagesData?.messages && (
 				<Flex direction="column-reverse" height="100%" overflowY="scroll">
-					{/* {messagesData.messages.map((message) => (
-						<MessageItem key={message.id} message={message} userId={userId} />
-					))} */}
+					{messagesData.messages.map((message) => (
+						// <MessageItem key={message.id} message={message} userId={userId} />
+						<Text>{message.body}</Text>
+					))}
 				</Flex>
 			)}
 		</Flex>
