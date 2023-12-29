@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { Box } from "@chakra-ui/react";
 import { Session } from "next-auth";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ConversationPopulated } from "../../../../kiwey-chat-backend/src/util/types";
 import ConversationOperations from "../../../graphql/operations/conversation";
@@ -19,6 +20,13 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 		loading: conversationsLoading,
 		subscribeToMore: subscribeToMoreConversations,
 	} = useQuery<ConversationsData>(ConversationOperations.Queries.conversations);
+
+	const router = useRouter();
+	const { conversationId } = router.query;
+
+	const onViewConversation = async (conversationId: string) => {
+		router.push({ query: { conversationId } });
+	};
 
 	const subscribeToNewConversations = () => {
 		subscribeToMoreConversations({
@@ -48,11 +56,18 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 	}, []);
 
 	return (
-		<Box width={{ base: "100%", md: "400px" }} bg="whiteAlpha.50" py={6} px={3}>
+		<Box
+			width={{ base: "100%", md: "400px" }}
+			bg="whiteAlpha.50"
+			py={6}
+			px={3}
+			display={{ base: conversationId ? "none" : "flex", md: "flex" }}
+		>
 			{/* Skeleton loader */}
 			<ConversationsList
 				session={session}
 				conversations={conversationsData?.conversations || null}
+				onViewConversation={onViewConversation}
 			/>
 		</Box>
 	);
