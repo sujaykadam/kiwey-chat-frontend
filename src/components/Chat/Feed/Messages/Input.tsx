@@ -50,11 +50,12 @@ const MessageInput: React.FunctionComponent<MessageInputProps> = ({
 			console.log("onSendMessageError", error);
 			toast.error("An error occurred");
 		}
+		setMessageBody("");
 	};
 	return (
-		<Box px={4} py={6} width="100%">
+		<Box p={4} width="100%" height="100%">
 			<Messages conversationId={conversationId} userId={session.user.id} />
-			<form onSubmit={onSendMessage}>
+			<form onSubmit={onSendMessage} style={{ marginTop: "16px" }}>
 				<Input
 					value={messageBody}
 					size="md"

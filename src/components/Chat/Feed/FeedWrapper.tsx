@@ -28,10 +28,9 @@ const FeedWrapper: React.FC<FeedWrapperProps> = ({ session }) => {
 						overflow="hidden"
 						flexGrow={1}
 					>
-						{/* {conversationId} */}
 						<MessagesHeader userId={userId} conversationId={conversationId} />
+						<MessageInput session={session} conversationId={conversationId} />
 					</Flex>
-					<MessageInput session={session} conversationId={conversationId} />
 				</>
 			) : (
 				<div>No Conversation</div>

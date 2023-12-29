@@ -59,14 +59,24 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 	}, [conversationId]);
 
 	return (
-		<Flex direction="column" justify="flex-end" overflow="hidden">
+		<Flex
+			direction="column"
+			justify="flex-end"
+			height={{ base: "calc(100vh - 168px)", md: "calc(100vh - 152px)" }}
+		>
 			{messagesLoading && (
-				<Stack spacing={4} my={4} height="100%">
+				<Stack spacing={4} height="min-content">
 					<SkeletonLoader count={4} height="80px" />
 				</Stack>
 			)}
 			{messagesData?.messages && (
-				<Flex direction="column-reverse" height="100%" width="100%" gap={6}>
+				<Flex
+					direction="column-reverse"
+					width="100%"
+					gap={6}
+					height="100vh"
+					overflowY="auto"
+				>
 					{messagesData.messages.map((message) => (
 						<MessageItem
 							key={message.id}
