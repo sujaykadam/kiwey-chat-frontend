@@ -12,6 +12,7 @@ import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import React, { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
+import { GoDotFill } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
 import { ConversationPopulated } from "../../../../../kiwey-chat-backend/src/util/types";
 import { formatUsernames } from "../../../util/functions";
@@ -28,10 +29,9 @@ interface ConversationItemProps {
 	conversation: ConversationPopulated;
 	onClick: () => void;
 	isSelected: boolean;
-	//   hasSeenLatestMessage: boolean | undefined;
+	hasSeenLatestMessage: boolean | undefined;
 	//   onDeleteConversation: (conversationId: string) => void;
 	//   onEditConversation?: () => void;
-	//   hasSeenLatestMessage?: boolean;
 	//   selectedConversationId?: string;
 	//   onLeaveConversation?: (conversation: ConversationPopulated) => void;
 }
@@ -41,7 +41,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
 	conversation,
 	onClick,
 	isSelected,
-	//   hasSeenLatestMessage,
+	hasSeenLatestMessage,
 	//   onDeleteConversation,
 	//   selectedConversationId,
 	//   onEditConversation,
@@ -119,11 +119,11 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
 			)} */}
 				</MenuList>
 			</Menu>
-			{/* <Flex position="absolute" left="-6px">
+			<Flex position="absolute" left="-6px">
 				{hasSeenLatestMessage === false && (
 					<GoDotFill fontSize={18} color="#6B46C1" />
 				)}
-			</Flex> */}
+			</Flex>
 			<Avatar />
 			<Flex justify="space-between" width="80%" height="100%">
 				<Flex direction="column" width="70%" height="100%">

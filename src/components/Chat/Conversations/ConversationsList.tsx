@@ -2,14 +2,20 @@ import { Box, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { ConversationPopulated } from "../../../../kiwey-chat-backend/src/util/types";
+import {
+	ConversationPopulated,
+	participantPopulated,
+} from "../../../../kiwey-chat-backend/src/util/types";
 import ConversationItem from "./ConversationItem";
 import ConversationModal from "./Modal/ConversationModal";
 
 interface ConversationsListProps {
 	session: Session;
 	conversations: Array<ConversationPopulated> | null;
-	onViewConversation: (conversationId: string) => void;
+	onViewConversation: (
+		conversationId: string,
+		hasSeenLatestMessage: boolean
+	) => void;
 }
 
 const ConversationsList: React.FC<ConversationsListProps> = ({
@@ -39,15 +45,25 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
 				</Text>
 			</Box>
 			<ConversationModal isOpen={isOpen} onClose={onClose} session={session} />
-			{conversations?.map((conversation) => (
-				<ConversationItem
-					key={conversation.id}
-					conversation={conversation}
-					onClick={() => onViewConversation(conversation.id)}
-					isSelected={conversation.id === router.query.conversationId}
-					userId={session.user.id}
-				/>
-			))}
+
+			{conversations?.map((conversation) => {
+				const hasSeenLatestMessage = !!conversation.participants.find(
+					(participant: participantPopulated) =>
+						participant.user.id === session.user.id
+				)?.hasSeenLatestMessage;
+				return (
+					<ConversationItem
+						key={conversation.id}
+						conversation={conversation}
+						onClick={() =>
+							onViewConversation(conversation.id, hasSeenLatestMessage)
+						}
+						isSelected={conversation.id === router.query.conversationId}
+						userId={session.user.id}
+						hasSeenLatestMessage={hasSeenLatestMessage}
+					/>
+				);
+			})}
 		</Box>
 	);
 };
