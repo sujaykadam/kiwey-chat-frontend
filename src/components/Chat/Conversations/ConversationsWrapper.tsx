@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { Box } from "@chakra-ui/react";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
+import { Box, Stack } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -8,7 +8,10 @@ import {
 	participantPopulated,
 } from "../../../../kiwey-chat-backend/src/util/types";
 import ConversationOperations from "../../../graphql/operations/conversation";
-import { ConversationsData } from "../../../util/types";
+import {
+	ConversationsData,
+	ConversationsUpdatedData,
+} from "../../../util/types";
 import SkeletonLoader from "../../common/SkeletonLoader";
 import ConversationsList from "./ConversationsList";
 interface ConversationsWrapperProps {
@@ -29,6 +32,17 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 		{ markConversationAsRead: Boolean },
 		{ conversationId: String; userId: String }
 	>(ConversationOperations.Mutations.markConversationAsRead);
+
+	useSubscription<ConversationsUpdatedData>(
+		ConversationOperations.Subscriptions.conversationUpdated,
+		{
+			onData: ({ client, data }) => {
+				const { data: subscriptionData } = data;
+				console.log("subscriptionData", subscriptionData);
+				if (!subscriptionData) return;
+			},
+		}
+	);
 
 	const router = useRouter();
 	const { conversationId } = router.query;
@@ -133,11 +147,13 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 			display={{ base: conversationId ? "none" : "flex", md: "flex" }}
 		>
 			{conversationsLoading ? (
-				<SkeletonLoader
-					count={conversationsData?.conversations.length || 3}
-					height="80px"
-					width="100%"
-				/>
+				<Stack spacing={4} width="100%">
+					<SkeletonLoader
+						count={conversationsData?.conversations.length || 3}
+						height="80px"
+						width="100%"
+					/>
+				</Stack>
 			) : (
 				<ConversationsList
 					session={session}

@@ -41,6 +41,14 @@ export interface ConversationsData {
 	conversations: Array<ConversationPopulated>;
 }
 
+export interface ConversationsUpdatedData {
+	conversationUpdated: {
+		conversation: Omit<ConversationPopulated, "latestMessage"> & {
+			latestMessage: MessagePopulated;
+		};
+	};
+}
+
 // Message Types
 export interface MessagesData {
 	messages: Array<MessagePopulated>;
