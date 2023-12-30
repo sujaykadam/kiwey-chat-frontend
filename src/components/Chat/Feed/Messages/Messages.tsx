@@ -35,9 +35,6 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 			},
 		}
 	);
-	if (messagesError) {
-		return null;
-	}
 
 	const subscribeToMoreMessages = (conversationId: String) => {
 		subscribeToMore({
@@ -48,7 +45,10 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 
 				const newMessage = subscriptionData.data.messageSent || {};
 				return Object.assign({}, prev, {
-					messages: [newMessage, ...prev.messages],
+					messages:
+						userId === newMessage.sender.id
+							? prev.messages
+							: [newMessage, ...prev.messages],
 				});
 			},
 		});
@@ -57,6 +57,10 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 	useEffect(() => {
 		subscribeToMoreMessages(conversationId);
 	}, [conversationId]);
+
+	if (messagesError) {
+		return null;
+	}
 
 	return (
 		<Flex
