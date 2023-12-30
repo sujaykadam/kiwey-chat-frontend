@@ -1,9 +1,12 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Box } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { ConversationPopulated } from "../../../../kiwey-chat-backend/src/util/types";
+import {
+	ConversationPopulated,
+	participantPopulated,
+} from "../../../../kiwey-chat-backend/src/util/types";
 import ConversationOperations from "../../../graphql/operations/conversation";
 import { ConversationsData } from "../../../util/types";
 import SkeletonLoader from "../../common/SkeletonLoader";
@@ -22,6 +25,11 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 		subscribeToMore: subscribeToMoreConversations,
 	} = useQuery<ConversationsData>(ConversationOperations.Queries.conversations);
 
+	const [markConversationAsRead] = useMutation<
+		{ markConversationAsRead: Boolean },
+		{ conversationId: String; userId: String }
+	>(ConversationOperations.Mutations.markConversationAsRead);
+
 	const router = useRouter();
 	const { conversationId } = router.query;
 
@@ -30,8 +38,63 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 		hasSeenLatestMessage: boolean
 	) => {
 		router.push({ query: { conversationId } });
-		if (!hasSeenLatestMessage) return;
+		if (hasSeenLatestMessage) return;
 		//mark conversation read
+		try {
+			await markConversationAsRead({
+				variables: {
+					userId: session.user.id,
+					conversationId,
+				},
+				optimisticResponse: {
+					markConversationAsRead: true,
+				},
+				update: (cache) => {
+					/**
+					 * Get conversation participants from cache
+					 */
+					const participantsFragment = cache.readFragment<{
+						participants: Array<participantPopulated>;
+					}>({
+						id: `Conversation:${conversationId}`,
+						fragment: ConversationOperations.Fragments.getParticipants,
+					});
+
+					if (!participantsFragment) return;
+
+					const participants = [...participantsFragment.participants];
+
+					const userParticipantIdx = participants.findIndex(
+						(p) => p.user.id === session.user.id
+					);
+
+					if (userParticipantIdx === -1) return;
+
+					const userParticipant = participants[userParticipantIdx];
+
+					/**
+					 * Update participant to show latest message as read
+					 */
+					participants[userParticipantIdx] = {
+						...userParticipant,
+						hasSeenLatestMessage: true,
+					};
+
+					/**
+					 * Update cache
+					 */
+					cache.writeFragment({
+						id: `Conversation:${conversationId}`,
+						fragment: ConversationOperations.Fragments.updateParticipants,
+						data: {
+							participants,
+						},
+					});
+				},
+			});
+		} catch (error) {
+			console.log("onViewConversation error", error);
+		}
 	};
 
 	const subscribeToNewConversations = () => {
