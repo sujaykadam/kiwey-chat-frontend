@@ -33,6 +33,7 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 		{ conversationId: String; userId: String }
 	>(ConversationOperations.Mutations.markConversationAsRead);
 
+	const router = useRouter();
 	useSubscription<ConversationsUpdatedData>(
 		ConversationOperations.Subscriptions.conversationUpdated,
 		{
@@ -40,16 +41,30 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 				const { data: subscriptionData } = data;
 				console.log("subscriptionData", subscriptionData);
 				if (!subscriptionData) return;
+
+				const {
+					conversationUpdated: {
+						conversation: { id: updatedConversationId },
+					},
+				} = subscriptionData;
+
+				const { conversationId: currentConversationId } = router.query;
+
+				const isViewingConversation =
+					updatedConversationId === currentConversationId;
+
+				if (isViewingConversation) {
+					onViewConversation(updatedConversationId);
+				}
 			},
 		}
 	);
 
-	const router = useRouter();
 	const { conversationId } = router.query;
 
 	const onViewConversation = async (
 		conversationId: string,
-		hasSeenLatestMessage: boolean
+		hasSeenLatestMessage: boolean = false
 	) => {
 		router.push({ query: { conversationId } });
 		if (hasSeenLatestMessage) return;
