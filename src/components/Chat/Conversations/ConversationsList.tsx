@@ -28,6 +28,11 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
 
 	const onOpen = () => setIsOpen(true);
 	const onClose = () => setIsOpen(false);
+	const sortedConversations = [...(conversations || [])].sort(
+		(conversation1, conversation2) =>
+			new Date(conversation2.updatedAt.valueOf()).getTime() -
+			new Date(conversation1.updatedAt.valueOf()).getTime()
+	);
 
 	return (
 		<Box width="100%">
@@ -46,7 +51,7 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
 			</Box>
 			<ConversationModal isOpen={isOpen} onClose={onClose} session={session} />
 
-			{conversations?.map((conversation) => {
+			{sortedConversations?.map((conversation) => {
 				const hasSeenLatestMessage = !!conversation.participants.find(
 					(participant: participantPopulated) =>
 						participant.user.id === session.user.id
