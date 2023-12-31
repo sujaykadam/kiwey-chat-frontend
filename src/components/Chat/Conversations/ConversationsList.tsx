@@ -33,9 +33,12 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
 			new Date(conversation2.updatedAt.valueOf()).getTime() -
 			new Date(conversation1.updatedAt.valueOf()).getTime()
 	);
+	const onDeleteConversation = async (conversationId: string) => {
+		return;
+	};
 
 	return (
-		<Box width="100%">
+		<Box width="calc(25vw - 24px)">
 			<Box
 				py={2}
 				px={4}
@@ -66,6 +69,7 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
 						isSelected={conversation.id === router.query.conversationId}
 						userId={session.user.id}
 						hasSeenLatestMessage={hasSeenLatestMessage}
+						onDeleteConversation={onDeleteConversation}
 					/>
 				);
 			})}

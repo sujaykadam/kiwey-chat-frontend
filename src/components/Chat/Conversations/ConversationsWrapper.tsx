@@ -155,7 +155,7 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 
 	return (
 		<Box
-			width={{ base: "100%", md: "400px" }}
+			width={{ base: "100vw", md: "30vw" }}
 			bg="whiteAlpha.50"
 			py={6}
 			px={3}
@@ -166,7 +166,7 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 					<SkeletonLoader
 						count={conversationsData?.conversations.length || 3}
 						height="80px"
-						width="100%"
+						width="calc(25vw - 24px)"
 					/>
 				</Stack>
 			) : (

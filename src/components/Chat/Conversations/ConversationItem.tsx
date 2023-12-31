@@ -29,7 +29,7 @@ interface ConversationItemProps {
 	onClick: () => void;
 	isSelected: boolean;
 	hasSeenLatestMessage: boolean | undefined;
-	//   onDeleteConversation: (conversationId: string) => void;
+	onDeleteConversation: (conversationId: string) => void;
 	//   onEditConversation?: () => void;
 	//   selectedConversationId?: string;
 	//   onLeaveConversation?: (conversation: ConversationPopulated) => void;
@@ -41,7 +41,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
 	onClick,
 	isSelected,
 	hasSeenLatestMessage,
-	//   onDeleteConversation,
+	onDeleteConversation,
 	//   selectedConversationId,
 	//   onEditConversation,
 	//   onLeaveConversation,
@@ -70,6 +70,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
 			onClick={handleClick}
 			onContextMenu={handleClick}
 			position="relative"
+			width="100%"
 		>
 			<Menu isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
 				<MenuList bg="#2d2d2d">
@@ -88,7 +89,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
 						icon={<MdDeleteOutline fontSize={20} />}
 						onClick={(event) => {
 							event.stopPropagation();
-							// onDeleteConversation(conversation.id);
+							onDeleteConversation(conversation.id);
 						}}
 						bg="#2d2d2d"
 						_hover={{ bg: "whiteAlpha.300" }}
