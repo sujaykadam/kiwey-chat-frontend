@@ -11,7 +11,6 @@ import {
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import React, { useState } from "react";
-import { AiOutlineEdit } from "react-icons/ai";
 import { GoDotFill } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
 import { ConversationPopulated } from "../../../../../kiwey-chat-backend/src/util/types";
@@ -74,7 +73,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
 		>
 			<Menu isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
 				<MenuList bg="#2d2d2d">
-					<MenuItem
+					{/* <MenuItem
 						icon={<AiOutlineEdit fontSize={20} />}
 						onClick={(event) => {
 							event.stopPropagation();
@@ -84,7 +83,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
 						_hover={{ bg: "whiteAlpha.300" }}
 					>
 						Edit
-					</MenuItem>
+					</MenuItem> */}
 					<MenuItem
 						icon={<MdDeleteOutline fontSize={20} />}
 						onClick={(event) => {
