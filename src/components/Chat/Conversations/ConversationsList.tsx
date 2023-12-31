@@ -1,6 +1,7 @@
 import { useMutation } from "@apollo/client";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Button, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -67,7 +68,7 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
 	};
 
 	return (
-		<Box width="calc(25vw - 24px)">
+		<Box width={{ base: "calc(100vw - 24px)", md: "calc(25vw - 24px)" }}>
 			<Box
 				py={2}
 				px={4}
@@ -102,6 +103,15 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
 					/>
 				);
 			})}
+			<Button
+				position="absolute"
+				bottom={3}
+				left={3}
+				width={{ base: "calc(100vw - 24px)", md: "calc(25vw - 24px)" }}
+				onClick={() => signOut()}
+			>
+				Logout
+			</Button>
 		</Box>
 	);
 };
