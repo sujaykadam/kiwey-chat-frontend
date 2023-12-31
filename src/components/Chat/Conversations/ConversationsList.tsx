@@ -1,11 +1,14 @@
+import { useMutation } from "@apollo/client";
 import { Box, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import {
 	ConversationPopulated,
 	participantPopulated,
 } from "../../../../kiwey-chat-backend/src/util/types";
+import conversationOperations from "../../../graphql/operations/conversation";
 import ConversationItem from "./ConversationItem";
 import ConversationModal from "./Modal/ConversationModal";
 
@@ -24,6 +27,10 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
 	onViewConversation,
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [deleteConversation] = useMutation<{
+		deleteConversation: boolean;
+		conversationId: string;
+	}>(conversationOperations.Mutations.deleteConversation);
 	const router = useRouter();
 
 	const onOpen = () => setIsOpen(true);
@@ -34,7 +41,29 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
 			new Date(conversation1.updatedAt.valueOf()).getTime()
 	);
 	const onDeleteConversation = async (conversationId: string) => {
-		return;
+		try {
+			toast.promise(
+				deleteConversation({
+					variables: {
+						conversationId,
+					},
+					update: () => {
+						router.replace(
+							typeof process.env.NEXT_PUBLIC_BASE_URL === "string"
+								? process.env.NEXT_PUBLIC_BASE_URL
+								: ""
+						);
+					},
+				}),
+				{
+					loading: "Deleting conversation",
+					success: "Conversation deleted",
+					error: "Failed to delete conversation",
+				}
+			);
+		} catch (error) {
+			console.log("onDeleteConversation error", error);
+		}
 	};
 
 	return (
