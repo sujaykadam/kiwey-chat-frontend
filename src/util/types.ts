@@ -48,6 +48,11 @@ export interface ConversationsUpdatedData {
 		};
 	};
 }
+export interface ConversationDeletedData {
+	conversationDeleted: {
+		id: string;
+	};
+}
 
 // Message Types
 export interface MessagesData {

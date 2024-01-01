@@ -9,6 +9,7 @@ import {
 } from "../../../../kiwey-chat-backend/src/util/types";
 import ConversationOperations from "../../../graphql/operations/conversation";
 import {
+	ConversationDeletedData,
 	ConversationsData,
 	ConversationsUpdatedData,
 } from "../../../util/types";
@@ -39,7 +40,6 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 		{
 			onData: ({ client, data }) => {
 				const { data: subscriptionData } = data;
-				console.log("subscriptionData", subscriptionData);
 				if (!subscriptionData) return;
 
 				const {
@@ -61,6 +61,39 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
 	);
 
 	const { conversationId } = router.query;
+
+	useSubscription<ConversationDeletedData>(
+		ConversationOperations.Subscriptions.conversationDeleted,
+		{
+			onData: ({ client, data }) => {
+				const { data: subscriptionData } = data;
+
+				if (!subscriptionData) return;
+
+				const existing = client.readQuery<ConversationsData>({
+					query: ConversationOperations.Queries.conversations,
+				});
+
+				if (!existing) return;
+
+				const { conversations } = existing;
+				const {
+					conversationDeleted: { id: deletedConversationId },
+				} = subscriptionData;
+
+				client.writeQuery<ConversationsData>({
+					query: ConversationOperations.Queries.conversations,
+					data: {
+						conversations: conversations.filter(
+							(conversation) => conversation.id !== deletedConversationId
+						),
+					},
+				});
+
+				router.push("/");
+			},
+		}
+	);
 
 	const onViewConversation = async (
 		conversationId: string,

@@ -68,7 +68,7 @@ const conversationOperations = {
 		conversationDeleted: gql`
 			subscription ConversationDeleted {
 				conversationDeleted {
-					conversationId
+					id
 				}
 			}
 		`,

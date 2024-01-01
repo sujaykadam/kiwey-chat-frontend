@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { Flex, Stack } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import MessageOperations from "../../../../graphql/operations/message";
@@ -19,6 +20,7 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 	userId,
 	conversationId,
 }) => {
+	const router = useRouter();
 	const {
 		data: messagesData,
 		loading: messagesLoading,
@@ -59,6 +61,7 @@ const Messages: React.FunctionComponent<MessagesProps> = ({
 	}, [conversationId]);
 
 	if (messagesError) {
+		router.push("/");
 		return null;
 	}
 
