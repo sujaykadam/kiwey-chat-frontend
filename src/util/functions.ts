@@ -1,4 +1,4 @@
-import { participantPopulated } from "../../../kiwey-chat-backend/src/util/types";
+import { participantPopulated } from "../../kiwey-chat-backend/src/util/types";
 
 export const formatUsernames = (
 	participants: Array<participantPopulated>,

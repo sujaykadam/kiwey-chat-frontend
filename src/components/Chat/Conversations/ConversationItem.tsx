@@ -13,7 +13,7 @@ import enUS from "date-fns/locale/en-US";
 import React, { useState } from "react";
 import { GoDotFill } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
-import { ConversationPopulated } from "../../../../../kiwey-chat-backend/src/util/types";
+import { ConversationPopulated } from "../../../../kiwey-chat-backend/src/util/types";
 import { formatUsernames } from "../../../util/functions";
 
 const formatRelativeLocale = {

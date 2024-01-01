@@ -4,7 +4,7 @@ import { ObjectID } from "bson";
 import { Session } from "next-auth";
 import * as React from "react";
 import toast from "react-hot-toast";
-import { SendMessageArguments } from "../../../../../../kiwey-chat-backend/src/util/types";
+import { SendMessageArguments } from "../../../../../kiwey-chat-backend/src/util/types";
 import MessageOperations from "../../../../graphql/operations/message";
 import { MessagesData } from "../../../../util/types";
 import Messages from "./Messages";

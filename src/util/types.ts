@@ -1,7 +1,7 @@
 import {
 	ConversationPopulated,
 	MessagePopulated,
-} from "../../../kiwey-chat-backend/src/util/types";
+} from "../../kiwey-chat-backend/src/util/types";
 // User Types
 export interface CreateUsernameData {
 	createUsername: {
